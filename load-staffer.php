@@ -752,18 +752,19 @@ function staffer_shortcode( $atts ) {
                                           <a href="<?php the_permalink(); ?>"><?php echo the_title(); ?></a>
 					</h4>
 					<?php
+                                        echo '<p class="muted-text">';
 					if ( get_post_meta( $post->ID, 'staffer_staff_title', true ) != '' ) {
-						echo '<p class="muted-text">';
-						echo get_post_meta( $post->ID, 'staffer_staff_title', true ) . '</p>';
+						echo get_post_meta( $post->ID, 'staffer_staff_title', true ) . '<br />';
 					}
                                         if ( get_post_meta( $post->ID, 'staffer_staff_email', true ) != '' ) {
 				           $email = get_post_meta( $post->ID, 'staffer_staff_email', true ); ?>
-				           <p class="muted-text"><a href="mailto:<?php echo antispambot( $email ); ?>?Subject=<?php _e( 'Contact from ', 'staffer' ); ?><?php bloginfo( 'name' ); ?>" target="_blank"><?php echo $email ?></a></p>
+				           <a href="mailto:<?php echo antispambot( $email ); ?>?Subject=<?php _e( 'Contact from ', 'staffer' ); ?><?php bloginfo( 'name' ); ?>" target="_blank"><?php echo $email ?></a><br />
 			                <?php }
                                         if ( get_post_meta( $post->ID, 'staffer_staff_phone', true ) != '' ) {
 				           $phone = get_post_meta( $post->ID, 'staffer_staff_phone', true ); ?>
-				           <p class="muted-text"><?php echo get_post_meta( $post->ID, 'staffer_staff_phone', true ); ?></p>
-			                <?php }?>
+				           <?php echo get_post_meta( $post->ID, 'staffer_staff_phone', true ); ?>
+			                <?php }
+                                        echo '</p>';?>
 				</header>
 				<div>
 					<?php if ( isset ( $stafferoptions['gridlayout'] ) ) { ?>
