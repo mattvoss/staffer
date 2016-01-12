@@ -747,9 +747,10 @@ function staffer_shortcode( $atts ) {
 
 		while ( $staff_query->have_posts() ) : $staff_query->the_post(); ?>
 			<div class="col-xs-12 col-sm-6 col-md-6">
-				<header>
+                            <div class="row">
+				<header class="col-xs-12 col-sm-6 col-md-6">
 					<h4>
-                                          <a href="<?php the_permalink(); ?>"><?php echo the_title(); ?></a>
+                                          <?php echo the_title(); ?>
 					</h4>
 					<?php
                                         echo '<p class="muted-text">';
@@ -766,7 +767,7 @@ function staffer_shortcode( $atts ) {
 			                <?php }
                                         echo '</p>';?>
 				</header>
-				<div>
+				<div class="col-xs-12 col-sm-6 col-md-6">
 					<?php if ( isset ( $stafferoptions['gridlayout'] ) ) { ?>
 						<?php the_post_thumbnail( 'medium', array( 'class' => 'aligncenter' ) ); ?>
 					<?php } else { ?>
@@ -781,6 +782,7 @@ function staffer_shortcode( $atts ) {
 					}
 					?>
 				</div>
+                          </div>
 			</div>
 		<?php endwhile;
 		wp_reset_postdata(); ?>
