@@ -759,7 +759,7 @@ function staffer_shortcode( $atts ) {
 					}
                                         if ( get_post_meta( $post->ID, 'staffer_staff_email', true ) != '' ) {
 				           $email = get_post_meta( $post->ID, 'staffer_staff_email', true ); ?>
-				           <a href="mailto:<?php echo antispambot( $email ); ?>?Subject=<?php _e( 'Contact from ', 'staffer' ); ?><?php bloginfo( 'name' ); ?>" target="_blank"><?php echo $email ?></a><br />
+				           <a href="mailto:<?php echo antispambot( $email ); ?>?Subject=<?php _e( 'Contact from ', 'staffer' ); ?><?php bloginfo( 'name' ); ?>" target="_blank"><?php echo "<i class=\"fa fa-envelope\"></i> ".$email ?></a><br />
 			                <?php }
                                         if ( get_post_meta( $post->ID, 'staffer_staff_phone', true ) != '' ) {
 				           $phone = get_post_meta( $post->ID, 'staffer_staff_phone', true ); ?>
