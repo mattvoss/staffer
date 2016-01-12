@@ -754,7 +754,7 @@ function staffer_shortcode( $atts ) {
 					<?php
                                         echo '<p class="muted-text">';
 					if ( get_post_meta( $post->ID, 'staffer_staff_title', true ) != '' ) {
-						echo get_post_meta( $post->ID, 'staffer_staff_title', true ) . '<br />';
+						echo '<span class="label label-info">'get_post_meta( $post->ID, 'staffer_staff_title', true ) . '</span><br />';
 					}
                                         if ( get_post_meta( $post->ID, 'staffer_staff_email', true ) != '' ) {
 				           $email = get_post_meta( $post->ID, 'staffer_staff_email', true ); ?>
@@ -762,7 +762,7 @@ function staffer_shortcode( $atts ) {
 			                <?php }
                                         if ( get_post_meta( $post->ID, 'staffer_staff_phone', true ) != '' ) {
 				           $phone = get_post_meta( $post->ID, 'staffer_staff_phone', true ); ?>
-				           <?php echo get_post_meta( $post->ID, 'staffer_staff_phone', true ); ?>
+				           <?php echo "<i class=\"fa fa-phone\"></i> ".get_post_meta( $post->ID, 'staffer_staff_phone', true ); ?>
 			                <?php }
                                         echo '</p>';?>
 				</header>
