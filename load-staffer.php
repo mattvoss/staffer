@@ -746,7 +746,7 @@ function staffer_shortcode( $atts ) {
 		<?php }
 
 		while ( $staff_query->have_posts() ) : $staff_query->the_post(); ?>
-			<div class="col-xs-12 col-sm-6 col-md-6">
+			<div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="row">
 				<header class="col-xs-12 col-sm-6 col-md-6">
 					<h4>
