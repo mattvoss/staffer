@@ -747,47 +747,46 @@ function staffer_shortcode( $atts ) {
 
 		while ( $staff_query->have_posts() ) : $staff_query->the_post(); ?>
 			<div class="col-xs-12 col-sm-12 col-md-12">
-                            <div class="row">
-				<header class="col-xs-12 col-sm-12 col-md-12">
-					<h4>
-                                          <?php echo the_title(); ?>
-					</h4>
-                                        <hr />
-				</header>
+                            <div class="panel panel-default">
+                              <div class="panel-heading">
+				<h4><?php echo the_title(); ?></h4>
                               </div>
-                              <div class="row">
-                                <div class="col-xs-12 col-sm-6 col-md-6">
-                                     <?php
-                                        echo '<p class="muted-text">';
-				        if ( get_post_meta( $post->ID, 'staffer_staff_title', true ) != '' ) {
-					        echo '<span class="label label-info">' . get_post_meta( $post->ID, 'staffer_staff_title', true ) . '</span><br />';
-				        }
-                                        if ( get_post_meta( $post->ID, 'staffer_staff_email', true ) != '' ) {
-			                   $email = get_post_meta( $post->ID, 'staffer_staff_email', true ); ?>
-			                   <a href="mailto:<?php echo antispambot( $email ); ?>?Subject=<?php _e( 'Contact from ', 'staffer' ); ?><?php bloginfo( 'name' ); ?>" target="_blank"><?php echo "<i class=\"fa fa-envelope\"></i> ".$email ?></a><br />
-		                        <?php }
-                                        if ( get_post_meta( $post->ID, 'staffer_staff_phone', true ) != '' ) {
-			                   $phone = get_post_meta( $post->ID, 'staffer_staff_phone', true ); ?>
-			                   <?php echo "<i class=\"fa fa-phone\"></i> ".get_post_meta( $post->ID, 'staffer_staff_phone', true ); ?>
-		                        <?php }
-                                        echo '</p>';?>
+                              <div class="panel-body">
+                                   <div class="row">
+                                        <div class="col-xs-12 col-sm-6 col-md-6">
+                                             <?php
+                                                echo '<p class="muted-text">';
+				                if ( get_post_meta( $post->ID, 'staffer_staff_title', true ) != '' ) {
+					                echo '<span class="label label-info">' . get_post_meta( $post->ID, 'staffer_staff_title', true ) . '</span><br />';
+				                }
+                                                if ( get_post_meta( $post->ID, 'staffer_staff_email', true ) != '' ) {
+			                           $email = get_post_meta( $post->ID, 'staffer_staff_email', true ); ?>
+			                           <a href="mailto:<?php echo antispambot( $email ); ?>?Subject=<?php _e( 'Contact from ', 'staffer' ); ?><?php bloginfo( 'name' ); ?>" target="_blank"><?php echo "<i class=\"fa fa-envelope\"></i> ".$email ?></a><br />
+		                                <?php }
+                                                if ( get_post_meta( $post->ID, 'staffer_staff_phone', true ) != '' ) {
+			                           $phone = get_post_meta( $post->ID, 'staffer_staff_phone', true ); ?>
+			                           <?php echo "<i class=\"fa fa-phone\"></i> ".get_post_meta( $post->ID, 'staffer_staff_phone', true ); ?>
+		                                <?php }
+                                                echo '</p>';?>
+                                        </div>
+				        <div class="col-xs-12 col-sm-6 col-md-6">
+					        <?php if ( isset ( $stafferoptions['gridlayout'] ) ) { ?>
+						        <?php the_post_thumbnail( 'medium', array( 'class' => 'aligncenter' ) ); ?>
+					        <?php } else { ?>
+						        <?php the_post_thumbnail( 'medium', array( 'class' => 'alignleft' ) ); ?>
+					        <?php }
+					        if ( $stafferoptions['estyle'] == null or $stafferoptions['estyle'] == 'excerpt' ) {
+						        the_excerpt();
+					        } elseif ( $stafferoptions['estyle'] == 'full' ) {
+						        the_content();
+					        } elseif ( $stafferoptions['estyle'] == 'none' ) {
+						        // nothing to see here
+					        }
+					        ?>
+				        </div>
+                                   </div>
                                 </div>
-				<div class="col-xs-12 col-sm-6 col-md-6">
-					<?php if ( isset ( $stafferoptions['gridlayout'] ) ) { ?>
-						<?php the_post_thumbnail( 'medium', array( 'class' => 'aligncenter' ) ); ?>
-					<?php } else { ?>
-						<?php the_post_thumbnail( 'medium', array( 'class' => 'alignleft' ) ); ?>
-					<?php }
-					if ( $stafferoptions['estyle'] == null or $stafferoptions['estyle'] == 'excerpt' ) {
-						the_excerpt();
-					} elseif ( $stafferoptions['estyle'] == 'full' ) {
-						the_content();
-					} elseif ( $stafferoptions['estyle'] == 'none' ) {
-						// nothing to see here
-					}
-					?>
-				</div>
-                          </div>
+                             </div>
 			</div>
 		<?php endwhile;
 		wp_reset_postdata(); ?>
