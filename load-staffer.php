@@ -740,30 +740,26 @@ function staffer_shortcode( $atts ) {
 	$staff_query = new WP_Query( $args );
 	if ( $staff_query->have_posts() ) {
 		global $post;
-		$stafferoptions = get_option( 'staffer' );
-
-		if ( isset ( $stafferoptions['gridlayout'] ) ) { ?>
-			<ul class="staffer-archive-grid">
-		<?php } else { ?>
-			<ul class="staffer-archive-list">
+		$stafferoptions = get_option( 'staffer' ); ?>
+		<div class="container-fluid">
+                  <div class="row">
 		<?php }
 
 		while ( $staff_query->have_posts() ) : $staff_query->the_post(); ?>
-			<li>
-				<header class="staffer-staff-header">
-					<h3 class="staffer-staff-title"><a href="<?php the_permalink(); ?>">
-							<?php echo the_title(); ?>
-						</a>
-					</h3>
+			<div class="col-xs-12 col-sm-6 col-md-6">
+				<header>
+					<h4>
+                                          <a href="<?php the_permalink(); ?>"><?php echo the_title(); ?></a>
+					</h4>
 					<?php
 					if ( get_post_meta( $post->ID, 'staffer_staff_title', true ) != '' ) {
-						echo '<em>';
-						echo get_post_meta( $post->ID, 'staffer_staff_title', true ) . '</em><br>';
+						echo '<p class="muted-text">';
+						echo get_post_meta( $post->ID, 'staffer_staff_title', true ) . '</p>';
 					}
 					?>
 
 				</header>
-				<div class="staff-content">
+				<div>
 					<?php if ( isset ( $stafferoptions['gridlayout'] ) ) { ?>
 						<?php the_post_thumbnail( 'medium', array( 'class' => 'aligncenter' ) ); ?>
 					<?php } else { ?>
@@ -778,10 +774,11 @@ function staffer_shortcode( $atts ) {
 					}
 					?>
 				</div>
-			</li>
+			</div>
 		<?php endwhile;
 		wp_reset_postdata(); ?>
-		</ul>
+                   </div>
+		</div>
 		<?php $output = ob_get_clean();
 
 		return $output;
