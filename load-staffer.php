@@ -783,6 +783,5 @@ function staffer_shortcode( $atts ) {
 
 		return $output;
 	}
-}
 
 add_shortcode( 'staffer', 'staffer_shortcode' );
