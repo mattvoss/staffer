@@ -758,8 +758,12 @@ function staffer_shortcode( $atts ) {
 					}
                                         if ( get_post_meta( $post->ID, 'staffer_staff_email', true ) != '' ) {
 				           $email = get_post_meta( $post->ID, 'staffer_staff_email', true ); ?>
-				           <p class="muted-text"><a href="mailto:<?php echo antispambot( $email ); ?>?Subject=<?php _e( 'Contact from ', 'staffer' ); ?><?php bloginfo( 'name' ); ?>" target="_blank">$email</a></p>
-			<?php }?>
+				           <p class="muted-text"><a href="mailto:<?php echo antispambot( $email ); ?>?Subject=<?php _e( 'Contact from ', 'staffer' ); ?><?php bloginfo( 'name' ); ?>" target="_blank"><?php echo $email ?></a></p>
+			                <?php }
+                                        if ( get_post_meta( $post->ID, 'staffer_staff_phone', true ) != '' ) {
+				           $phone = get_post_meta( $post->ID, 'staffer_staff_phone', true ); ?>
+				           <p class="muted-text"><?php echo get_post_meta( $post->ID, 'staffer_staff_phone', true ); ?></p>
+			                <?php }?>
 				</header>
 				<div>
 					<?php if ( isset ( $stafferoptions['gridlayout'] ) ) { ?>
