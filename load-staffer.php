@@ -757,7 +757,7 @@ function staffer_shortcode( $atts ) {
                                              <?php
                                                 echo '<p class="muted-text">';
 				                if ( get_post_meta( $post->ID, 'staffer_staff_title', true ) != '' ) {
-					                echo '<span class="label label-info">' . get_post_meta( $post->ID, 'staffer_staff_title', true ) . '</span><br />';
+					                echo '<span class="label label-default">' . get_post_meta( $post->ID, 'staffer_staff_title', true ) . '</span><br />';
 				                }
                                                 if ( get_post_meta( $post->ID, 'staffer_staff_email', true ) != '' ) {
 			                           $email = get_post_meta( $post->ID, 'staffer_staff_email', true ); ?>
