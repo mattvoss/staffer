@@ -75,3 +75,12 @@ ul.staffer-archive-list {
 #staffer-author-posts {
 	margin: 20px;
 }	
+
+
+.staffer-entry {
+    margin-bottom: 1em;
+}
+.staffer-entry h2 {
+    font-size: 1.2em;
+    margin-top: 0;
+}

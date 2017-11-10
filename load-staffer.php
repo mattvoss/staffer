@@ -705,96 +705,57 @@ if ( $perpage != '' ) {
 
 // adds staff shortcode
 function staffer_shortcode( $atts ) {
-	ob_start();
 
-	$attrib_values = shortcode_atts( array(
-		'order'      => 'DESC',
-		'orderby'    => 'date',
-		'number'     => - 1,
-		'department' => '',
-	), $atts );
+    ob_start();
 
-	$order      = $attrib_values['order'];
-	$orderby    = $attrib_values['orderby'];
-	$number     = $attrib_values['number'];
-	$department = $attrib_values['department'];
+    $attrib_values = shortcode_atts( array(
+        'order'      => 'DESC',
+        'orderby'    => 'date',
+        'number'     => - 1,
+        'department' => '',
+    ), $atts );
 
-	if ( $department != '' ) {
-		$tax_query = array(
-			array(
-				'taxonomy' => 'department',
-				'field'    => 'slug',
-				'terms'    => $department,
-			),
-		);
-	} else {
-		$tax_query = null;
-	}
-	$args        = array(
-		'post_type'      => 'staff',
-		'order'          => $order,
-		'orderby'        => $orderby,
-		'posts_per_page' => $number,
-		'tax_query'      => $tax_query,
-	);
-	$staff_query = new WP_Query( $args );
-	if ( $staff_query->have_posts() ) {
-		global $post;
-		$stafferoptions = get_option( 'staffer' ); ?>
-		<div class="container-fluid">
-                  <div class="row">
-		<?php }
+    $order      = $attrib_values['order'];
+    $orderby    = $attrib_values['orderby'];
+    $number     = $attrib_values['number'];
+    $department = $attrib_values['department'];
 
-		while ( $staff_query->have_posts() ) : $staff_query->the_post(); ?>
-			<div class="col-xs-12 col-sm-12 col-md-12">
-                            <div class="panel panel-default">
-                              <div class="panel-heading">
-				<h4><?php echo the_title(); ?></h4>
-                              </div>
-                              <div class="panel-body">
-                                   <div class="row">
-                                        <div class="col-xs-12 col-sm-6 col-md-6">
-                                             <?php
-                                                echo '<p class="muted-text">';
-				                if ( get_post_meta( $post->ID, 'staffer_staff_title', true ) != '' ) {
-					                echo '<span class="label label-default">' . get_post_meta( $post->ID, 'staffer_staff_title', true ) . '</span><br />';
-				                }
-                                                if ( get_post_meta( $post->ID, 'staffer_staff_email', true ) != '' ) {
-			                           $email = get_post_meta( $post->ID, 'staffer_staff_email', true ); ?>
-			                           <a href="mailto:<?php echo antispambot( $email ); ?>?Subject=<?php _e( 'Contact from ', 'staffer' ); ?><?php bloginfo( 'name' ); ?>" target="_blank"><?php echo "<i class=\"fa fa-envelope\"></i> ".$email ?></a><br />
-		                                <?php }
-                                                if ( get_post_meta( $post->ID, 'staffer_staff_phone', true ) != '' ) {
-			                           $phone = get_post_meta( $post->ID, 'staffer_staff_phone', true ); ?>
-			                           <?php echo "<i class=\"fa fa-phone\"></i> ".get_post_meta( $post->ID, 'staffer_staff_phone', true ); ?>
-		                                <?php }
-                                                echo '</p>';?>
-                                        </div>
-				        <div class="col-xs-12 col-sm-6 col-md-6">
-					        <?php if ( isset ( $stafferoptions['gridlayout'] ) ) { ?>
-						        <?php the_post_thumbnail( 'medium', array( 'class' => 'aligncenter' ) ); ?>
-					        <?php } else { ?>
-						        <?php the_post_thumbnail( 'medium', array( 'class' => 'alignleft' ) ); ?>
-					        <?php }
-					        if ( $stafferoptions['estyle'] == null or $stafferoptions['estyle'] == 'excerpt' ) {
-						        the_excerpt();
-					        } elseif ( $stafferoptions['estyle'] == 'full' ) {
-						        the_content();
-					        } elseif ( $stafferoptions['estyle'] == 'none' ) {
-						        // nothing to see here
-					        }
-					        ?>
-				        </div>
-                                   </div>
-                                </div>
-                             </div>
-			</div>
-		<?php endwhile;
-		wp_reset_postdata(); ?>
-                   </div>
-		</div>
-		<?php $output = ob_get_clean();
+    if ( $department != '' ) {
+        $tax_query = array(
+            array(
+                'taxonomy' => 'department',
+                'field'    => 'slug',
+                'terms'    => $department,
+            ),
+        );
+    } else {
+        $tax_query = null;
+    }
 
-		return $output;
-	}
+    $args = array(
+        'post_type'      => 'staff',
+        'order'          => $order,
+        'orderby'        => $orderby,
+        'posts_per_page' => $number,
+        'tax_query'      => $tax_query,
+    );
+    $staff_query = new WP_Query( $args );
+
+    if ( $staff_query->have_posts() ) {
+        global $post;
+        $stafferoptions = get_option( 'staffer' );
+    }
+
+    if ( isset ( $stafferoptions['gridlayout'] ) ) {
+        include ( plugin_dir_path (__FILE__) . 'inc/staffer-grid.php');
+    } else {
+        include ( plugin_dir_path (__FILE__) . 'inc/staffer-list.php');
+    }
+
+    wp_reset_postdata();
+    $output = ob_get_clean();
+
+    return $output;
+}
 
 add_shortcode( 'staffer', 'staffer_shortcode' );

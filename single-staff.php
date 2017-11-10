@@ -1,7 +1,11 @@
-<?php // staffer single template
-get_header(); ?>
-
 <?php
+
+/**
+ * staffer single template
+ */
+
+get_header();
+
 // prints the start wrapper
 // must be carried over if using a custom template, else options will not work
 $stafferoptions = get_option( 'staffer' );
@@ -11,109 +15,112 @@ if ( isset ( $stafferoptions['customwrapper'] ) && isset ( $stafferoptions['star
 } else {
 	include( plugin_dir_path( __FILE__ ) . 'inc/start-wrapper.php' );
 }
-?>
 
-<?php if ( have_posts() ) : ?>
+if ( have_posts() ) :
+    while ( have_posts() ) : the_post();
+        ?>
+        <header class="staffer-staff-header">
+            <?php
+            // checks for slug and builds path
+            if ( get_option( 'permalink_structure' ) ) {
 
-	<?php while ( have_posts() ) : the_post(); ?>
+                $pageslug = $stafferoptions['slug'];
+                if ( $pageslug == '' ) {
+                    $pageslug = 'staff';
+                }
+                $homeurl     = esc_url( home_url( '/' ) );
+                $basepageurl = $homeurl . $pageslug;
+            } else {
+                $homeurl     = esc_url( home_url( '/' ) );
+                $basepageurl = $homeurl . '?post_type=staff';
+            }
+            $pagetitle = $stafferoptions['ptitle'];
+            if ( $pagetitle == '' ) {
+                $pagetitle = 'Staff';
+            }
 
-		<header class="staffer-staff-header">
-			<?php
-			// checks for slug and builds path
-			if ( get_option( 'permalink_structure' ) ) {
+            // checks for manual mode
+            // does not display breadcrumb trail in manual mode
+            if ( ! isset ( $stafferoptions['manual_mode'] ) ) { ?>
+                <div class="staffer-breadcrumbs">
+                    <div itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+                        <a href="<?php echo esc_url( home_url( '/' ) ); ?>" itemprop="url"><?php _e( 'Home', 'staffer' ); ?></a> &#8250;
+                        <a href="<?php echo esc_url( $basepageurl ); ?>" itemprop="url"><?php echo $pagetitle; ?></a> &#8250;
+                        <span itemprop="title"><?php the_title(); ?></span>
+                    </div>
+                </div>
+            <?php }
 
-				$pageslug = $stafferoptions['slug'];
-				if ( $pageslug == '' ) {
-					$pageslug = 'staff';
-				}
-				$homeurl     = esc_url( home_url( '/' ) );
-				$basepageurl = $homeurl . $pageslug;
-			} else {
-				$homeurl     = esc_url( home_url( '/' ) );
-				$basepageurl = $homeurl . '?post_type=staff';
-			}
-			$pagetitle = $stafferoptions['ptitle'];
-			if ( $pagetitle == '' ) {
-				$pagetitle = 'Staff';
-			}
-			?>
+            echo '<h2>';
+            echo the_title();
+            echo '</h2>';
+            if ( get_post_meta( $post->ID, 'staffer_staff_title', true ) != '' ) {
+                //echo '<em>'.get_post_meta( $post->ID, 'staffer_staff_title', true ) . '</em><br>';
+            }
+            ?>
+        </header>
 
-			<?php
-			// checks for manual mode
-			// does not display breadcrumb trail in manual mode
-			if ( ! isset ( $stafferoptions['manual_mode'] ) ) { ?>
-				<div class="staffer-breadcrumbs">
-					<div itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
-						<a href="<?php echo esc_url( home_url( '/' ) ); ?>" itemprop="url"><?php _e( 'Home', 'staffer' ); ?></a> &#8250;
-						<a href="<?php echo esc_url( $basepageurl ); ?>" itemprop="url"><?php echo $pagetitle; ?></a> &#8250;
-						<span itemprop="title"><?php the_title(); ?></span>
-					</div>
-				</div>
+        <div class="container-fluid col-xs-12 col-sm-12 col-md-12">
+            <div class="row">
 
-			<?php } ?>
+                <div class="col-xs-12 col-sm-3 col-md-3">
 
-			<?php
-			echo '<h2>';
-			echo the_title();
-			echo '</h2>';
-			if ( get_post_meta( $post->ID, 'staffer_staff_title', true ) != '' ) {
-				echo '<em>';
-				echo get_post_meta( $post->ID, 'staffer_staff_title', true ) . '</em><br>';
-			}
-			$terms = get_the_term_list( $post->ID, 'department', '', ', ' );
-			if ( $terms != '' ) {
-				echo '<em>';
-				_e( 'Department: ', 'staffer' );
-				echo $terms;
-				echo '</em>';
-			} ?>
-		</header>
+                    <?php
+                        the_post_thumbnail( 'medium', array( 'class' => 'alignleft' ) );
+                    ?>
+                </div>
 
-		<div class="staff-content">
-			<?php
-			the_post_thumbnail( 'medium', array( 'class' => 'alignleft' ) );
-			the_content(); ?>
-		</div>
+                <div class="col-xs-12 col-sm-9 col-md-9 text-left">
+                    <p>
+                        <?php
+                            if ( get_post_meta( $post->ID, 'staffer_staff_title', true ) != '' ) {
+                                echo get_post_meta( $post->ID, 'staffer_staff_title', true ).'<br />';
+                            }
+                            if ( get_post_meta( $post->ID, 'staffer_staff_email', true ) != '' ) {
+                                $email = get_post_meta( $post->ID, 'staffer_staff_email', true );
+                                echo '<a href="mailto:'.antispambot( $email ).'" target="_blank"><i class="fa fa-envelope"></i> '.$email.'</a><br />';
+                            }
+                            if ( get_post_meta( $post->ID, 'staffer_staff_phone', true ) != '' ) {
+                                $phone = get_post_meta( $post->ID, 'staffer_staff_phone', true );
+                                echo '<i class="fa fa-phone"></i> '.get_post_meta( $post->ID, 'staffer_staff_phone', true ).'<br />';
+                            }
+                            if ( get_post_meta( $post->ID, 'staffer_staff_website', true ) != '' ) {
+                                $website = get_post_meta( $post->ID, 'staffer_staff_website', true );
+                                echo '<a href="'.get_post_meta( $post->ID, 'staffer_staff_website', true ).'" target="_blank"><i class="fa fa-user fa-fw"></i></a>';
+                            }
+                        ?>
+                    </p>
+                    <p>
+                        <?php
+                            // social + contact links
+                            if ( get_post_meta( $post->ID, 'staffer_staff_fb', true ) != '' ) {
+                                echo '<a href="'.get_post_meta( $post->ID, 'staffer_staff_fb', true ).'" target="_blank"><i class="fa fa-facebook fa-fw"></i></a>';
+                            }
+                            if ( get_post_meta( $post->ID, 'staffer_staff_gplus', true ) != '' ) {
+                                echo '<a href="'.get_post_meta( $post->ID, 'staffer_staff_gplus', true ).'" target="_blank"><i class="fa fa-google-plus fa-fw"></i></a>';
+                            }
+                            if ( get_post_meta( $post->ID, 'staffer_staff_twitter', true ) != '' ) {
+                                echo '<a href="'.get_post_meta( $post->ID, 'staffer_staff_twitter', true ).'" target="_blank"><i class="fa fa-twitter fa-fw"></i></a>';
+                            }
+                            if ( get_post_meta( $post->ID, 'staffer_staff_linkedin', true ) != '' ) {
+                                echo '<a href="'.get_post_meta( $post->ID, 'staffer_staff_linkedin', true ).'" target="_blank"><i class="fa fa-linkedin fa-fw"></i></a>';
+                            }
+                        ?>
+                    </p>
+                    <?php
+                        $terms = get_the_term_list( $post->ID, 'department', '', ', ' );
+                        if ( $terms != '' ) {
+                            echo '<p>'.$terms.'</p>';
+                        }
 
-		<div class="staffer-staff-social-links">
-			<?php
-			// social + contact links
-			if ( get_post_meta( $post->ID, 'staffer_staff_fb', true ) != '' ) { ?>
-				<a href="<?php echo get_post_meta( $post->ID, 'staffer_staff_fb', true ); ?>" target="_blank">
-					<i class="fa fa-facebook fa-fw"></i></a>
-			<?php
-			}
-			if ( get_post_meta( $post->ID, 'staffer_staff_gplus', true ) != '' ) { ?>
-				<a href="<?php echo get_post_meta( $post->ID, 'staffer_staff_gplus', true ); ?>" target="_blank">
-					<i class="fa fa-google-plus fa-fw"></i></a>
-			<?php }
-			if ( get_post_meta( $post->ID, 'staffer_staff_twitter', true ) != '' ) { ?>
-				<a href="<?php echo get_post_meta( $post->ID, 'staffer_staff_twitter', true ); ?>" target="_blank">
-					<i class="fa fa-twitter fa-fw"></i></a>
-			<?php }
-			if ( get_post_meta( $post->ID, 'staffer_staff_linkedin', true ) != '' ) { ?>
-				<a href="<?php echo get_post_meta( $post->ID, 'staffer_staff_linkedin', true ); ?>" target="_blank">
-					<i class="fa fa-linkedin fa-fw"></i></a>
-			<?php }
-			if ( get_post_meta( $post->ID, 'staffer_staff_email', true ) != '' ) {
-				$email = get_post_meta( $post->ID, 'staffer_staff_email', true ); ?>
-				<a href="mailto:<?php echo antispambot( $email ); ?>?Subject=<?php _e( 'Contact from ', 'staffer' ); ?><?php bloginfo( 'name' ); ?>" target="_blank">
-					<i class="fa fa-envelope fa-fw"></i></a>
-			<?php }
-			if ( get_post_meta( $post->ID, 'staffer_staff_website', true ) != '' ) {
-				$website = get_post_meta( $post->ID, 'staffer_staff_website', true ); ?>
-				<a href="<?php echo get_post_meta( $post->ID, 'staffer_staff_website', true ); ?>" target="_blank">
-					<i class="fa fa-user fa-fw"></i></a>
-			<?php }
-			if ( get_post_meta( $post->ID, 'staffer_staff_phone', true ) != '' ) {
-				$phone = get_post_meta( $post->ID, 'staffer_staff_phone', true ); ?>
-				<span><?php echo get_post_meta( $post->ID, 'staffer_staff_phone', true ); ?></span>
-			<?php }
-			?>
-		</div>
+                        the_content();
+                    ?>
+                </div>
+            </div>
+        </div>
 
-	<?php endwhile;
-endif; ?>
+    <?php endwhile;
+    endif; ?>
 
 <?php
 /* -------- code for displaying latest blog posts by the member ------- */

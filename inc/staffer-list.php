@@ -1,62 +1,40 @@
-<?php // staffer list template
+<div class="container-fluid col-xs-12 col-sm-12 col-md-12">
+    <?php while ( $staff_query->have_posts() ) : $staff_query->the_post(); ?>
+        <div class="row staffer-entry">
+            <div class="col-xs-12 col-sm-3 col-md-3">
+                <?php
+                    if ( isset ( $stafferoptions['gridlayout'] ) ) {
+                        the_post_thumbnail( 'thumb', array( 'class' => 'aligncenter' ) );
+                    } else {
+                        the_post_thumbnail( 'thumb', array( 'class' => 'aligncenter' ) );
+                    }
+                ?>
+            </div>
+            <div class="col-xs-12 col-sm-9 col-md-9 text-left">
+                <h2><a href="<?php the_permalink(); ?>"><?php echo the_title(); ?></a></h2>
+                <?php
+                    if ( get_post_meta( $post->ID, 'staffer_staff_title', true ) != '' ) {
+                        echo get_post_meta( $post->ID, 'staffer_staff_title', true ).'<br />';
+                    }
+                    if ( get_post_meta( $post->ID, 'staffer_staff_email', true ) != '' ) {
+                        $email = get_post_meta( $post->ID, 'staffer_staff_email', true );
+                        echo '<a href="mailto:'.antispambot( $email ).'" target="_blank"><i class="fa fa-envelope"></i> '.$email.'</a><br />';
+                    }
+                    if ( get_post_meta( $post->ID, 'staffer_staff_phone', true ) != '' ) {
+                        $phone = get_post_meta( $post->ID, 'staffer_staff_phone', true );
+                        echo '<i class="fa fa-phone"></i> '.get_post_meta( $post->ID, 'staffer_staff_phone', true );
+                    }
 
-$stafferoptions = get_option('staffer');
+                    if ($stafferoptions['estyle'] == null or $stafferoptions['estyle'] == 'excerpt' ) {
+                        the_excerpt();
+                    } elseif ($stafferoptions['estyle'] == 'full' ) {
+                        the_content();
+                    } elseif ($stafferoptions['estyle'] == 'none' ) {
+                        // nothing to see here
+                    }
+                ?>
+            </div>
+        </div>
+    <?php endwhile; ?>
+</div>
 
-// checks the post per page option
-//if ( $stafferoptions['perpage'] != null ) {
-	//$postsperpage = $stafferoptions['perpage'];
-//}
-//else {
-	//$postsperpage = 9;
-//}
-					//$args = array ( 
-					//	'post_type' => 'staff',
-						//'pagination'	=> true,
-					//	'posts_per_page' => $postsperpage, 
-						//'paged' => $paged
-						//);
-					//$the_query = new WP_Query( $args );
-					
-			if (have_posts() ) : ?>
-			
-			<ul class="staffer-archive-list">
-			
-			<?php while ( have_posts() ) : ?>
-			
-			<?php the_post(); ?>
-
-				<li>
-				<header class="staffer-staff-header">
-				<h3 class="staffer-staff-title"><a href="<?php the_permalink(); ?>">
-					<?php echo the_title(); ?>
-					</a>
-				</h3>
-				<?php
-				if ( get_post_meta ($post->ID,'staffer_staff_title', true) != '' ) {
-					echo '<em>';
-					echo get_post_meta ($post->ID,'staffer_staff_title', true) . '</em><br>';
-					}
-					?>
-				
-				</header>
-					<div class="staff-content">
-					<?php
-						if ( has_post_thumbnail() ) { ?>
-							<a href="<?php the_permalink(); ?>">
-								<?php the_post_thumbnail ( 'medium', array ('class' => 'alignleft') ); ?>
-							</a>
-							<?php
-						}
-						if ($stafferoptions['estyle'] == null or $stafferoptions['estyle'] == 'excerpt' ) {
-							the_excerpt();
-						} elseif ($stafferoptions['estyle'] == 'full' ) {
-							the_content();
-						} elseif ($stafferoptions['estyle'] == 'none' ) {
-							// nothing to see here
-						} 
-						?>
-					</div>
-				</li>
-			<?php endwhile;
-			endif; ?>
-			</ul>
